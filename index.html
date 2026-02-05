@@ -2,917 +2,382 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🎁 FastRandomBot</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для Илюхи!</title>
     <style>
-        /* iOS Dark Theme */
-        :root {
-            --bg-primary: #000000;
-            --bg-secondary: #1c1c1e;
-            --bg-tertiary: #2c2c2e;
-            --text-primary: #ffffff;
-            --text-secondary: #8e8e93;
-            --text-tertiary: #636366;
-            --accent: #0a84ff;
-            --accent-light: #5ac8fa;
-            --danger: #ff453a;
-            --success: #32d74b;
-            --warning: #ffd60a;
-            --border: #3a3a3c;
-            --card-bg: #1c1c1e;
-            --input-bg: #2c2c2e;
-            --shadow: rgba(0, 0, 0, 0.5);
-            --ios-blue: #007AFF;
-            --ios-gray: #8E8E93;
-            --ios-dark-gray: #1C1C1E;
-            --ios-light-gray: #F2F2F7;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
-        
+
         body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            background-color: #000;
+            color: #fff;
             min-height: 100vh;
-            padding: 0;
-            margin: 0;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-        
-        .ios-container {
-            max-width: 100%;
-            padding: 16px;
-            padding-bottom: 100px;
-        }
-        
-        /* iOS Header */
-        .ios-header {
-            padding: 20px 0 24px 0;
-        }
-        
-        .ios-header h1 {
-            font-size: 34px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 6px;
-            background: linear-gradient(135deg, var(--ios-blue), var(--accent-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .ios-header p {
-            font-size: 17px;
-            color: var(--text-secondary);
-            line-height: 1.4;
-            font-weight: 400;
-        }
-        
-        /* iOS Search */
-        .ios-search {
-            margin: 20px 0 24px 0;
-            position: relative;
-        }
-        
-        .ios-search-bar {
-            width: 100%;
-            padding: 16px 52px 16px 52px;
-            background: var(--input-bg);
-            border: none;
-            border-radius: 14px;
-            font-size: 17px;
-            color: var(--text-primary);
-            font-weight: 400;
-            border: 1px solid var(--border);
-        }
-        
-        .ios-search-bar::placeholder {
-            color: var(--text-tertiary);
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-tertiary);
-            font-size: 18px;
-        }
-        
-        /* iOS Stats */
-        .ios-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin: 24px 0;
-        }
-        
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px 16px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-        
-        .stat-number {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-        
-        .stat-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        /* iOS FAB */
-        .ios-fab {
-            position: fixed;
-            bottom: 24px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #FF9F0A, #FFD60A);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000;
-            font-size: 32px;
-            font-weight: 300;
-            box-shadow: 0 8px 32px rgba(255, 159, 10, 0.4);
-            cursor: pointer;
-            z-index: 1000;
-            border: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .ios-fab:active {
-            transform: scale(0.92);
-        }
-        
-        /* Giveaway Cards */
-        .giveaway-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            margin-top: 8px;
-        }
-        
-        .ios-card {
-            background: var(--card-bg);
-            border-radius: 18px;
-            padding: 20px;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
-        }
-        
-        .ios-card:active {
-            background: var(--bg-tertiary);
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-        }
-        
-        .status-badge {
-            display: inline-flex;
             align-items: center;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            justify-content: center;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            overflow-x: hidden;
         }
-        
-        .status-active {
-            background: rgba(50, 215, 75, 0.15);
-            color: var(--success);
-        }
-        
-        .status-scheduled {
-            background: rgba(10, 132, 255, 0.15);
-            color: var(--ios-blue);
-        }
-        
-        .status-finished {
-            background: rgba(142, 142, 147, 0.15);
-            color: var(--text-secondary);
-        }
-        
-        .card-title {
-            font-size: 18px;
-            font-weight: 700;
-            line-height: 1.4;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .card-channel {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 16px;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-        
-        .card-channel::before {
-            content: "📢";
-            font-size: 15px;
-        }
-        
-        .card-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-        }
-        
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 15px;
-            color: var(--text-secondary);
-        }
-        
-        /* Modal */
-        .ios-modal-overlay {
+
+        .page {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 2000;
-            backdrop-filter: blur(20px);
-            animation: fadeIn 0.3s ease;
+            max-width: 1800px;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-out;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .ios-modal {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg-secondary);
-            border-radius: 24px 24px 0 0;
-            padding: 24px;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-        
-        .modal-header {
+
+        .page.active {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            margin-bottom: 28px;
+            justify-content: center;
         }
-        
-        .modal-title {
-            font-size: 24px;
+
+        /* Главная страница */
+        .main-container {
+            text-align: center;
+            padding: 40px 20px;
+            width: 100%;
+        }
+
+        .main-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 800;
-            color: var(--text-primary);
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            letter-spacing: -0.5px;
+            line-height: 1.1;
         }
-        
-        .ios-close {
-            width: 32px;
-            height: 32px;
-            border-radius: 16px;
-            background: var(--input-bg);
+
+        .subtitle {
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            color: #888;
+            margin-bottom: 60px;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .qualities-btn {
+            background: transparent;
+            border: 2px solid #fff;
+            color: white;
+            padding: clamp(14px, 4vw, 18px) clamp(40px, 8vw, 50px);
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .qualities-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Страница качеств */
+        .qualities-container {
+            width: 100%;
+            padding: 40px 20px;
+        }
+
+        .qualities-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 25px;
+            width: 100%;
+            margin: 0 auto 60px;
+        }
+
+        .quality-card {
+            background: rgba(25, 25, 25, 0.9);
+            border-radius: 18px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .quality-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .quality-title {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            color: #fff;
+            margin-bottom: 15px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .quality-description {
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
+            color: #aaa;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        .quality-image {
+            width: 100%;
+            height: 90px;
+            margin: 15px auto;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-primary);
-            font-size: 22px;
-            cursor: pointer;
-            border: none;
+            font-size: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        /* Form */
-        .ios-form-group {
-            margin-bottom: 28px;
-        }
-        
-        .ios-label {
-            display: block;
-            margin-bottom: 12px;
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        
-        .ios-input, .ios-textarea {
-            width: 100%;
-            padding: 18px;
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            font-size: 17px;
-            color: var(--text-primary);
-            font-family: inherit;
-        }
-        
-        .ios-textarea {
-            min-height: 120px;
-            resize: vertical;
-            line-height: 1.5;
-        }
-        
-        .ios-button {
-            width: 100%;
-            padding: 20px;
-            background: var(--ios-blue);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 8px;
-        }
-        
-        .ios-button:active {
-            transform: scale(0.98);
-            opacity: 0.9;
-        }
-        
-        .date-time-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        
-        /* Empty State */
-        .ios-empty {
+
+        .thank-you-message {
+            color: #333;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
             text-align: center;
-            padding: 80px 20px;
-        }
-        
-        .empty-icon {
-            font-size: 64px;
-            margin-bottom: 24px;
-            opacity: 0.5;
-        }
-        
-        .empty-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--text-primary);
-        }
-        
-        .empty-text {
-            font-size: 17px;
-            color: var(--text-secondary);
+            margin: 40px auto 30px;
+            font-weight: 600;
             line-height: 1.4;
-            margin-bottom: 32px;
+            padding: 0 20px;
+            max-width: 800px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
-        
-        /* Loader */
-        .ios-loader {
+
+        .back-btn-container {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 2px solid #fff;
+            color: white;
+            padding: clamp(12px, 4vw, 15px) clamp(35px, 8vw, 40px);
+            font-size: clamp(0.9rem, 4vw, 1.1rem);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            letter-spacing: 0.3px;
             display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 3px solid var(--border);
-            border-top-color: var(--ios-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 40px auto;
+            min-width: 200px;
         }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+
+        .back-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
         }
-        
-        /* Safe Areas */
-        @supports (padding: max(0px)) {
-            .ios-container, .ios-modal {
-                padding-left: max(16px, env(safe-area-inset-left));
-                padding-right: max(16px, env(safe-area-inset-right));
-                padding-bottom: max(16px, env(safe-area-inset-bottom));
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 1400px) {
+            .qualities-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .qualities-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .qualities-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
             
-            .ios-fab {
-                right: max(20px, env(safe-area-inset-right));
-                bottom: max(24px, env(safe-area-inset-bottom));
+            .quality-card {
+                min-height: 240px;
+                padding: 20px;
             }
+        }
+
+        @media (max-width: 500px) {
+            .qualities-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .quality-card {
+                min-height: 220px;
+            }
+            
+            .main-container,
+            .qualities-container {
+                padding: 20px 15px;
+            }
+        }
+
+        /* Улучшение скролла */
+        * {
+            scroll-behavior: smooth;
+        }
+
+        /* Запрет выделения для лучшего UX на мобильных */
+        button {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
     </style>
 </head>
 <body>
-    <div class="ios-container">
-        <!-- Header -->
-        <div class="ios-header">
-            <h1>🎁 FastRandomBot</h1>
-            <p>Создавайте и управляйте розыгрышами в Telegram</p>
-        </div>
-        
-        <!-- Search -->
-        <div class="ios-search">
-            <div class="search-icon">🔍</div>
-            <input type="text" class="ios-search-bar" placeholder="Поиск розыгрышей..." id="searchInput">
-        </div>
-        
-        <!-- Stats -->
-        <div class="ios-stats" id="stats">
-            <div class="stat-card">
-                <div class="stat-number" id="totalGiveaways">0</div>
-                <div class="stat-label">Всего</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="activeGiveaways">0</div>
-                <div class="stat-label">Активных</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalParticipants">0</div>
-                <div class="stat-label">Участников</div>
-            </div>
-        </div>
-        
-        <!-- Giveaway List -->
-        <div class="giveaway-list" id="giveawayList">
-            <div class="ios-loader"></div>
-        </div>
-        
-        <!-- FAB -->
-        <button class="ios-fab" onclick="openCreateModal()" id="fabButton">+</button>
-    </div>
-    
-    <!-- Create Modal -->
-    <div class="ios-modal-overlay" id="createModal">
-        <div class="ios-modal">
-            <div class="modal-header">
-                <div class="modal-title">🎯 Новый розыгрыш</div>
-                <button class="ios-close" onclick="closeModal('createModal')">×</button>
-            </div>
-            
-            <form id="giveawayForm">
-                <!-- Channel -->
-                <div class="ios-form-group">
-                    <label class="ios-label">📢 Канал для розыгрыша</label>
-                    <input type="text" class="ios-input" id="channel" placeholder="@username канала" required>
-                    <small style="color: var(--text-tertiary); font-size: 15px; margin-top: 8px; display: block;">
-                        Бот должен быть администратором в канале
-                    </small>
-                </div>
-                
-                <!-- Text -->
-                <div class="ios-form-group">
-                    <label class="ios-label">📝 Текст розыгрыша</label>
-                    <textarea class="ios-textarea" id="giveawayText" placeholder="Опишите что разыгрывается..." required></textarea>
-                    <small style="color: var(--text-tertiary); font-size: 15px; margin-top: 8px; display: block;">
-                        Поддерживается форматирование: **жирный**, *курсив*
-                    </small>
-                </div>
-                
-                <!-- Start Time -->
-                <div class="ios-form-group">
-                    <label class="ios-label">⏰ Время начала</label>
-                    <div class="date-time-group">
-                        <input type="date" class="ios-input" id="startDate" required>
-                        <input type="time" class="ios-input" id="startTime" required>
-                    </div>
-                </div>
-                
-                <!-- End Time -->
-                <div class="ios-form-group">
-                    <label class="ios-label">⏰ Время окончания</label>
-                    <div class="date-time-group">
-                        <input type="date" class="ios-input" id="endDate" required>
-                        <input type="time" class="ios-input" id="endTime" required>
-                    </div>
-                </div>
-                
-                <!-- Winners -->
-                <div class="ios-form-group">
-                    <label class="ios-label">🏆 Количество победителей</label>
-                    <input type="number" class="ios-input" id="winnersCount" min="1" max="100" value="1" required>
-                </div>
-                
-                <!-- Button Text -->
-                <div class="ios-form-group">
-                    <label class="ios-label">🔘 Текст кнопки</label>
-                    <input type="text" class="ios-input" id="buttonText" value="🎁 Участвовать (%amount%)" required>
-                    <small style="color: var(--text-tertiary); font-size: 15px; margin-top: 8px; display: block;">
-                        %amount% заменяется на количество участников
-                    </small>
-                </div>
-                
-                <!-- Conditions -->
-                <div class="ios-form-group">
-                    <label class="ios-label">📋 Условия участия (через запятую)</label>
-                    <input type="text" class="ios-input" id="conditions" placeholder="@channel1, @channel2">
-                </div>
-                
-                <!-- Create Button -->
-                <button type="button" class="ios-button" onclick="createGiveaway()">
-                    🎉 Создать розыгрыш
-                </button>
-            </form>
+    <!-- Главная страница -->
+    <div class="page main-page active" id="mainPage">
+        <div class="main-container">
+            <h1 class="main-title">Для Илюхи!</h1>
+            <p class="subtitle">- от твоего друга @aleksayxx (Лёхи) 😁</p>
+            <button class="qualities-btn" onclick="showQualities()">К твоим качествам!</button>
         </div>
     </div>
-    
-    <!-- View Modal -->
-    <div class="ios-modal-overlay" id="viewModal">
-        <div class="ios-modal">
-            <div class="modal-header">
-                <div class="modal-title">🎁 Детали розыгрыша</div>
-                <button class="ios-close" onclick="closeModal('viewModal')">×</button>
+
+    <!-- Страница качеств -->
+    <div class="page qualities-page" id="qualitiesPage">
+        <div class="qualities-container">
+            <div class="qualities-grid">
+                <!-- Первая строка - 5 качеств -->
+                <div class="quality-card">
+                    <h3 class="quality-title">Чувство юмора</h3>
+                    <p class="quality-description">Бро! У тебя реально жесткое чувство юмора, ты можешь угарать как конь от звука пердежа 😂</p>
+                </div>
+
+                <div class="quality-card">
+                    <h3 class="quality-title">Твой характер 👄</h3>
+                    <p class="quality-description">Да ты супер пикмуха! Как тебя угараздело быть такой бомбой?!?</p>
+                </div>
+
+                <div class="quality-card">
+                    <h3 class="quality-title">Твое IQ</h3>
+                    <p class="quality-description">Емае у тебя IQ как у Ивана Золо - как у тебя получилось развить свой мозг до 133 IQ??</p>
+                </div>
+
+                <div class="quality-card">
+                    <h3 class="quality-title">Твоя фигура</h3>
+                    <p class="quality-description">Илюха ты ваще в курсе что у тебя физ. форма как у Хабиба Нурмагомедова?? А вот я точно знаю что это реально!</p>
+                </div>
+
+                <div class="quality-card">
+                    <h3 class="quality-title">Внешность 💘</h3>
+                    <p class="quality-description">На твой рост и лицо поведется каждая девочка 😉</p>
+                </div>
+
+                <!-- Вторая строка - 5 качеств -->
+                <div class="quality-card">
+                    <h3 class="quality-title">Дурность 🪿</h3>
+                    <p class="quality-description">Ну ты конечно и макака, за то с тобой очень интересно и ни когда не соскучишься</p>
+                </div>
+
+                <div class="quality-card">
+                    <h3 class="quality-title">Если-бы ты был машиной:</h3>
+                    <div class="quality-image">
+                        🚗
+                    </div>
+                </div>
+
+                <div class="quality-card">
+                    <h3 class="quality-title">Твоя энергия ⚡</h3>
+                    <p class="quality-description">С тобой никогда не бывает скучно! Твоя энергия заряжает всех вокруг</p>
+                </div>
+
+                <div class="quality-card">
+                    <h3 class="quality-title">Надёжность 🤝</h3>
+                    <p class="quality-description">На тебя всегда можно положиться в любой ситуации</p>
+                </div>
+
+                <div class="quality-card">
+                    <h3 class="quality-title">Твой стиль ✨</h3>
+                    <p class="quality-description">У тебя уникальный подход ко всему, это и есть твоя фишка!</p>
+                </div>
             </div>
-            <div id="viewModalContent">
-                <!-- Content will be loaded here -->
+
+            <div class="thank-you-message">
+                Спасибо тебе за всё! С Днём Рождения!!!
+            </div>
+
+            <div class="back-btn-container">
+                <button class="back-btn" onclick="showMainPage()">Вернуться назад</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Telegram Web App
-        const tg = window.Telegram.WebApp;
-        
-        // Initialize
-        tg.expand();
-        tg.setHeaderColor('#000000');
-        tg.setBackgroundColor('#000000');
-        
-        // User data
-        const user = tg.initDataUnsafe?.user;
-        const userId = user?.id;
-        
-        // State
-        let giveaways = [];
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', async () => {
-            console.log('Mini App initialized');
-            
-            // Set default dates
-            const now = new Date();
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            document.getElementById('startDate').valueAsDate = now;
-            document.getElementById('startTime').value = now.toTimeString().substring(0, 5);
-            document.getElementById('endDate').valueAsDate = tomorrow;
-            document.getElementById('endTime').value = now.toTimeString().substring(0, 5);
-            
-            // Load giveaways
-            await loadGiveaways();
-            
-            // Search
-            document.getElementById('searchInput').addEventListener('input', searchGiveaways);
-        });
-        
-        // Load giveaways
-        async function loadGiveaways() {
-            try {
-                // Send request to bot
-                tg.sendData(JSON.stringify({
-                    action: 'get_giveaways',
-                    user_id: userId
-                }));
-                
-                // We'll handle response in onEvent
-                
-            } catch (error) {
-                console.error('Error loading giveaways:', error);
-                showEmptyState();
-            }
+        function showQualities() {
+            document.getElementById('mainPage').classList.remove('active');
+            document.getElementById('qualitiesPage').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
-        // Handle data from bot
-        tg.onEvent('webAppDataReceived', (event) => {
-            try {
-                console.log('Data received:', event);
-                
-                // Try to parse as JSON from message
-                if (event && event.data) {
-                    const data = JSON.parse(event.data);
-                    if (data.giveaways) {
-                        giveaways = data.giveaways;
-                        displayGiveaways(giveaways);
-                        updateStats();
-                        updateFAB();
-                    }
-                }
-            } catch (error) {
-                console.error('Error processing data:', error);
-            }
-        });
-        
-        // Display giveaways
-        function displayGiveaways(giveawaysList) {
-            const giveawayList = document.getElementById('giveawayList');
-            
-            if (!giveawaysList || giveawaysList.length === 0) {
-                showEmptyState();
-                return;
-            }
-            
-            giveawayList.innerHTML = '';
-            
-            giveawaysList.forEach(giveaway => {
-                const card = document.createElement('div');
-                card.className = 'ios-card';
-                
-                // Status
-                let statusText, statusClass;
-                switch(giveaway.status) {
-                    case 'active': statusText = 'АКТИВЕН'; statusClass = 'status-active'; break;
-                    case 'scheduled': statusText = 'ЗАПЛАНИРОВАН'; statusClass = 'status-scheduled'; break;
-                    case 'finished': statusText = 'ЗАВЕРШЕН'; statusClass = 'status-finished'; break;
-                    default: statusText = 'НЕИЗВЕСТНО'; statusClass = 'status-finished';
-                }
-                
-                // Time
-                const endTime = new Date(giveaway.end_time);
-                const now = new Date();
-                const timeDiff = endTime - now;
-                
-                let timeText = '';
-                if (timeDiff > 0) {
-                    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    
-                    if (days > 0) timeText = `${days}д ${hours}ч`;
-                    else if (hours > 0) timeText = `${hours}ч`;
-                    else timeText = '<1ч';
-                } else {
-                    timeText = 'Завершен';
-                }
-                
-                card.innerHTML = `
-                    <div class="card-header">
-                        <span class="status-badge ${statusClass}">${statusText}</span>
-                        <div style="font-size: 15px; color: var(--text-secondary);">${timeText}</div>
-                    </div>
-                    <div class="card-title">${giveaway.text}</div>
-                    <div class="card-channel">${giveaway.channel}</div>
-                    <div class="card-meta">
-                        <div class="meta-item">
-                            👥 ${giveaway.participants_count || 0}
-                        </div>
-                        <div class="meta-item">
-                            🏆 ${giveaway.winners_count}
-                        </div>
-                        <div class="meta-item">
-                            📅 ${new Date(giveaway.end_time).toLocaleDateString('ru-RU')}
-                        </div>
-                    </div>
-                `;
-                
-                card.addEventListener('click', () => viewGiveaway(giveaway.id));
-                card.addEventListener('touchstart', () => {
-                    card.style.transform = 'scale(0.98)';
-                });
-                card.addEventListener('touchend', () => {
-                    card.style.transform = 'scale(1)';
-                });
-                
-                giveawayList.appendChild(card);
-            });
+
+        function showMainPage() {
+            document.getElementById('qualitiesPage').classList.remove('active');
+            document.getElementById('mainPage').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
-        // Show empty state
-        function showEmptyState() {
-            const giveawayList = document.getElementById('giveawayList');
-            giveawayList.innerHTML = `
-                <div class="ios-empty">
-                    <div class="empty-icon">🎁</div>
-                    <div class="empty-title">Нет розыгрышей</div>
-                    <div class="empty-text">
-                        У вас пока нет созданных розыгрышей.<br>
-                        Создайте первый прямо сейчас!
-                    </div>
-                    <button onclick="openCreateModal()" 
-                            style="padding: 16px 32px; background: var(--ios-blue); color: white; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer;">
-                        Создать розыгрыш
-                    </button>
-                </div>
-            `;
-        }
-        
-        // Update statistics
-        function updateStats() {
-            const stats = {
-                total: giveaways.length,
-                active: giveaways.filter(g => g.status === 'active').length,
-                participants: giveaways.reduce((sum, g) => sum + (g.participants_count || 0), 0)
-            };
+
+        // Адаптивная проверка
+        function checkLayout() {
+            const container = document.querySelector('.qualities-grid');
+            const screenWidth = window.innerWidth;
             
-            document.getElementById('totalGiveaways').textContent = stats.total;
-            document.getElementById('activeGiveaways').textContent = stats.active;
-            document.getElementById('totalParticipants').textContent = stats.participants;
-        }
-        
-        // Update FAB visibility
-        function updateFAB() {
-            const fab = document.getElementById('fabButton');
-            if (giveaways.length === 0) {
-                fab.style.display = 'none';
+            // Динамическое изменение сетки в зависимости от ширины экрана
+            if (screenWidth >= 1400) {
+                container.style.gridTemplateColumns = 'repeat(5, 1fr)';
+            } else if (screenWidth >= 1100) {
+                container.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            } else if (screenWidth >= 800) {
+                container.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            } else if (screenWidth >= 500) {
+                container.style.gridTemplateColumns = 'repeat(2, 1fr)';
             } else {
-                fab.style.display = 'flex';
+                container.style.gridTemplateColumns = '1fr';
             }
         }
-        
-        // Search
-        function searchGiveaways(e) {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            if (!searchTerm) {
-                displayGiveaways(giveaways);
-                return;
-            }
-            
-            const filtered = giveaways.filter(g => 
-                g.text.toLowerCase().includes(searchTerm) ||
-                g.channel.toLowerCase().includes(searchTerm)
-            );
-            
-            displayGiveaways(filtered);
-        }
-        
-        // Modal functions
-        function openCreateModal() {
-            document.getElementById('createModal').style.display = 'block';
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        
-        // View giveaway
-        function viewGiveaway(giveawayId) {
-            const giveaway = giveaways.find(g => g.id === giveawayId);
-            if (!giveaway) return;
-            
-            const content = document.getElementById('viewModalContent');
-            const endTime = new Date(giveaway.end_time);
-            
-            content.innerHTML = `
-                <div style="margin-bottom: 24px;">
-                    <div style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary);">
-                        ${giveaway.text}
-                    </div>
-                    <div style="font-size: 17px; color: var(--text-secondary);">
-                        📢 ${giveaway.channel}
-                    </div>
-                </div>
-                
-                <div style="background: var(--input-bg); border-radius: 14px; padding: 20px; margin-bottom: 24px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
-                        <span style="color: var(--text-secondary);">Победителей:</span>
-                        <span style="font-weight: 700; color: var(--text-primary);">${giveaway.winners_count}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
-                        <span style="color: var(--text-secondary);">Участников:</span>
-                        <span style="font-weight: 700; color: var(--text-primary);">${giveaway.participants_count || 0}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span style="color: var(--text-secondary);">Завершится:</span>
-                        <span style="font-weight: 700; color: var(--text-primary);">
-                            ${endTime.toLocaleDateString('ru-RU')} ${endTime.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'})}
-                        </span>
-                    </div>
-                </div>
-                
-                ${giveaway.conditions && giveaway.conditions.length > 0 ? `
-                <div style="margin-bottom: 24px;">
-                    <div style="font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">📋 Условия:</div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        ${giveaway.conditions.map(cond => `
-                            <span style="background: rgba(0, 122, 255, 0.15); color: var(--ios-blue); padding: 8px 12px; border-radius: 10px; font-size: 15px;">
-                                ${cond}
-                            </span>
-                        `).join('')}
-                    </div>
-                </div>
-                ` : ''}
-                
-                <button onclick="deleteGiveaway('${giveaway.id}')" 
-                        style="width: 100%; padding: 16px; background: rgba(255, 69, 58, 0.15); color: var(--danger); border: none; border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer; margin-top: 20px;">
-                    Удалить розыгрыш
-                </button>
-            `;
-            
-            document.getElementById('viewModal').style.display = 'block';
-        }
-        
-        // Delete giveaway
-        function deleteGiveaway(giveawayId) {
-            if (!confirm('Удалить этот розыгрыш?')) return;
-            
-            tg.sendData(JSON.stringify({
-                action: 'delete_giveaway',
-                giveaway_id: giveawayId
-            }));
-            
-            closeModal('viewModal');
-            
-            // Reload after a delay
-            setTimeout(() => {
-                loadGiveaways();
-            }, 1000);
-        }
-        
-        // Create giveaway
-        function createGiveaway() {
-            const channel = document.getElementById('channel').value.trim();
-            const text = document.getElementById('giveawayText').value.trim();
-            const startDate = document.getElementById('startDate').value;
-            const startTime = document.getElementById('startTime').value;
-            const endDate = document.getElementById('endDate').value;
-            const endTime = document.getElementById('endTime').value;
-            const winnersCount = document.getElementById('winnersCount').value;
-            const buttonText = document.getElementById('buttonText').value.trim();
-            const conditions = document.getElementById('conditions').value
-                .split(',')
-                .map(c => c.trim())
-                .filter(c => c);
-            
-            // Validation
-            if (!channel || !text || !startDate || !startTime || !endDate || !endTime || !winnersCount || !buttonText) {
-                alert('Пожалуйста, заполните все обязательные поля');
-                return;
-            }
-            
-            // Send data to bot
-            tg.sendData(JSON.stringify({
-                action: 'create_giveaway',
-                data: {
-                    user_id: userId,
-                    channel: channel,
-                    text: text,
-                    start_time: `${startDate}T${startTime}`,
-                    end_time: `${endDate}T${endTime}`,
-                    winners_count: winnersCount,
-                    button_text: buttonText,
-                    conditions: conditions
-                }
-            }));
-            
-            closeModal('createModal');
-            
-            // Show success message
-            alert('✅ Розыгрыш создан! Данные отправлены боту.');
-            
-            // Clear form
-            document.getElementById('giveawayForm').reset();
-            
-            // Set default dates again
-            const now = new Date();
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            document.getElementById('startDate').valueAsDate = now;
-            document.getElementById('startTime').value = now.toTimeString().substring(0, 5);
-            document.getElementById('endDate').valueAsDate = tomorrow;
-            document.getElementById('endTime').value = now.toTimeString().substring(0, 5);
-            
-            // Reload giveaways after a delay
-            setTimeout(() => {
-                loadGiveaways();
-            }, 2000);
-        }
-        
-        // Listen for messages from bot
-        document.addEventListener('DOMContentLoaded', () => {
-            // This is a workaround for receiving data from bot
-            // In real scenario, use proper Web App data handling
+
+        // Проверяем при загрузке и изменении размера
+        window.addEventListener('load', checkLayout);
+        window.addEventListener('resize', checkLayout);
+
+        // Предотвращаем масштабирование на iOS
+        document.addEventListener('touchmove', function(e) {
+            if(e.scale !== 1) e.preventDefault();
+        }, { passive: false });
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLayout();
         });
     </script>
 </body>
